@@ -1,0 +1,93 @@
+body {
+    margin: auto;
+    width: 70%;
+}
+form {
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+}
+
+#container {
+    margin-top: 2em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "sprites moves"
+    "chain chain";
+}
+
+#pokeSprite {
+    grid-area: sprites;
+    margin: auto;
+    display: grid;
+    grid-template-rows: 1fr 50px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+    "sprite sprite"
+    "name id";
+}
+
+#sprite {
+    grid-area: sprite;
+}
+
+#name {
+    grid-area: name;
+    text-align: center;
+}
+
+#id {
+    grid-area: id;
+    text-align: center;
+}
+
+#pokeMoves {
+    grid-area: moves;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-row-gap: 1em;
+    grid-column-gap: 1em;
+    grid-template-areas:
+    "move1 move2"
+    "move3 move4";
+}
+
+#move1{
+    grid-area: move1;
+    text-align: center;
+}
+#move2{
+    grid-area: move2;
+    text-align: center;
+}
+#move3{
+    grid-area: move3;
+    text-align: center;
+}
+#move4{
+    grid-area: move4;
+    text-align: center;
+}
+
+#pokeChain {
+    grid-area: chain;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+    "evo1 evo2 evo3";
+}
+#firstPokemon{
+    grid-area: evo1;
+}
+
+#secondPokemon {
+    grid-area: evo2;
+}
+
+#thirdPokemon {
+    grid-area: evo3;
+
+}
