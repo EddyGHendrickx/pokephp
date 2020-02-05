@@ -1,4 +1,5 @@
 <?php
+
 $input = strtolower($_GET['inputField']);
 
 function getNameAndId(string $inputValue) : array {
@@ -27,8 +28,16 @@ function getEvolutionChain(string $inputValue): array
     $secondEvolution = $dataChain['chain']['evolves_to'][0]['species']['name'];
     $thirdEvolution = $dataChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
     $evolutions = array();
-    array_push($evolutions, $firstEvolution, $secondEvolution, $thirdEvolution);
-    return $evolutions;
+    if (isset($thirdEvolution)){
+        array_push($evolutions, $firstEvolution, $secondEvolution, $thirdEvolution);
+        return $evolutions;
+    } elseif (isset($secondEvolution)){
+        array_push($evolutions, $firstEvolution, $secondEvolution);
+    } else {
+        array_push($evolutions, $firstEvolution);
+        return $evolutions;
+    }
+
 }
 
 
@@ -85,6 +94,7 @@ if (!($isAPokemon)) {
         </div>
     </div>
     <div id="pokeMoves">
+        <div id="moveTitle">MOVES</div>
         <div id="move1"><?php echo getMoves($input)[0] ?></div>
         <div id="move2"><?php echo getMoves($input)[1] ?></div>
         <div id="move3"><?php echo getMoves($input)[2] ?></div>
