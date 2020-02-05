@@ -1,5 +1,8 @@
 <?php
-
+declare(strict_types = 1);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
 $input = strtolower($_GET['inputField']);
 
 function getNameAndId(string $inputValue) : array {
@@ -28,16 +31,8 @@ function getEvolutionChain(string $inputValue): array
     $secondEvolution = $dataChain['chain']['evolves_to'][0]['species']['name'];
     $thirdEvolution = $dataChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
     $evolutions = array();
-    if (isset($thirdEvolution)){
-        array_push($evolutions, $firstEvolution, $secondEvolution, $thirdEvolution);
-        return $evolutions;
-    } elseif (isset($secondEvolution)){
-        array_push($evolutions, $firstEvolution, $secondEvolution);
-    } else {
-        array_push($evolutions, $firstEvolution);
-        return $evolutions;
-    }
-
+    array_push($evolutions, $firstEvolution, $secondEvolution, $thirdEvolution);
+    return $evolutions;
 }
 
 
@@ -46,18 +41,18 @@ function getMoves(string $pokemonInput): array
     $response = file_get_contents("https://pokeapi.co/api/v2/pokemon/" . $pokemonInput);
     $data = json_decode($response, true);
     $moves = array();
-    for ($i = 0; $i < 4; $i++) {
+    if (count($data['moves']) == 1){
+        $movesLength = 1;
+    } else {
+        $movesLength = 4;
+    }
+    for ($i = 0; $i < $movesLength; $i++) {
         array_push($moves, $data['moves'][$i]['move']['name']);
     }
     return $moves;
 }
 
 
-// Check for valid input
-$isAPokemon = isset($pokeName);
-if (!($isAPokemon)) {
-    $sprite = 'https://lh3.googleusercontent.com/proxy/L7keklfvrENwjdvlA5o3Qu5oN-5xR8g-Gj9PeJa1Nol-7lskE05tC4bGKf6IdFOxWnEY9vOwep0PC07U2FeTnM4ix1bqhdleYlahoroqWKpLHw';
-};
 
 ?>
 
@@ -82,6 +77,14 @@ if (!($isAPokemon)) {
         <div id="name"><?php echo getNameAndId($input)[0] ?> </div>
         <div id="id">ID: <?php echo getNameAndId($input)[1] ?></div>
     </div>
+<!-- IF PHP returns a null value, HTML stops loading from that point -->
+    <div id="pokeMoves">
+        <div id="moveTitle">MOVES</div>
+        <div id="move1"><?php echo getMoves($input)[0] ?></div>
+        <div id="move2"><?php echo getMoves($input)[1] ?></div>
+        <div id="move3"><?php echo getMoves($input)[2] ?></div>
+        <div id="move4"><?php echo getMoves($input)[3] ?></div>
+    </div>
     <div id="pokeChain">
         <div id="firstPokemon">
             <img src="<?php echo pokeAPISprites(getEvolutionChain($input)[0]) ?>" alt="">
@@ -92,13 +95,6 @@ if (!($isAPokemon)) {
         <div id="thirdPokemon">
             <img src="<?php echo pokeAPISprites(getEvolutionChain($input)[2]) ?>" alt="">
         </div>
-    </div>
-    <div id="pokeMoves">
-        <div id="moveTitle">MOVES</div>
-        <div id="move1"><?php echo getMoves($input)[0] ?></div>
-        <div id="move2"><?php echo getMoves($input)[1] ?></div>
-        <div id="move3"><?php echo getMoves($input)[2] ?></div>
-        <div id="move4"><?php echo getMoves($input)[3] ?></div>
     </div>
 </div>
 </body>
