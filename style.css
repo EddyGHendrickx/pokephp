@@ -15,10 +15,11 @@ form {
     margin-top: 2em;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
     "sprites moves"
-    "chain chain";
+    "chain chain"
+    "eevee eevee";
 }
 
 #pokeSprite {
@@ -105,4 +106,34 @@ form {
 #thirdPokemon {
     grid-area: evo3;
 
+}
+
+#eeveeLutions {
+    grid-area: eevee;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-areas:
+    "eevee1 eevee2 eevee3 eevee4 eevee5 eevee6 eevee7";
+}
+
+#eevee1 {
+    grid-area: eevee1;
+}
+#eevee2 {
+    grid-area: eevee2;
+}
+#eevee3 {
+    grid-area: eevee3;
+}
+#eevee4 {
+    grid-area: eevee4;
+}
+#eevee5 {
+    grid-area: eevee5;
+}
+#eevee6 {
+    grid-area: eevee6;
+}
+#eevee7 {
+    grid-area: eevee7;
 }

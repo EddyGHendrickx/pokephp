@@ -19,7 +19,6 @@ function pokeAPISprites(string $inputValue): string
     $data = json_decode($response, true);
     if (isset($data['sprites']['front_default'])){
         return $data['sprites']['front_default'];
-
     } else {
         return "";
     }
@@ -59,7 +58,22 @@ function getEvolutionChain(string $inputValue): array
         return $evolutions;
 }
 
-
+function hasMultipleEvolutions (string $inputValue) : array {
+    $responseForChain = file_get_contents('https://pokeapi.co/api/v2/pokemon-species/' . $inputValue);
+    $dataForChain = json_decode($responseForChain, true);
+    $evolutionChainUrl = $dataForChain['evolution_chain']['url'];
+    $responseChain = file_get_contents($evolutionChainUrl);
+    $dataChain = json_decode($responseChain, true);
+    $evolutions = [];
+    foreach ($dataChain['chain']['evolves_to'] as $evol){
+        array_push($evolutions, $evol['species']['name']);
+    }
+    $NUMBEROFMAXEVOLUTIONS = 8;
+    for ($i = count($dataChain['chain']['evolves_to']); $i < $NUMBEROFMAXEVOLUTIONS; $i++){
+        array_push($evolutions, "");
+    }
+    return $evolutions;
+}
 
 function getMoves(string $pokemonInput): array
 {
@@ -75,8 +89,6 @@ function getMoves(string $pokemonInput): array
     }
     return $moves;
 }
-
-
 
 ?>
 
@@ -118,6 +130,15 @@ function getMoves(string $pokemonInput): array
         <div id="move2"><?php echo getMoves($input)[1] ?></div>
         <div id="move3"><?php echo getMoves($input)[2] ?></div>
         <div id="move4"><?php echo getMoves($input)[3] ?></div>
+    </div>
+    <div id="eeveeLutions">
+        <div id="eevee1"><img src="<?php  echo pokeAPISprites(hasMultipleEvolutions($input)[1])?>" ></div>
+        <div id="eevee2"><img src="<?php  echo pokeAPISprites(hasMultipleEvolutions($input)[2])?>" ></div>
+        <div id="eevee3"><img src="<?php  echo pokeAPISprites(hasMultipleEvolutions($input)[3])?>" ></div>
+        <div id="eevee4"><img src="<?php  echo pokeAPISprites(hasMultipleEvolutions($input)[4])?>" ></div>
+        <div id="eevee5"><img src="<?php  echo pokeAPISprites(hasMultipleEvolutions($input)[5])?>" ></div>
+        <div id="eevee6"><img src="<?php  echo pokeAPISprites(hasMultipleEvolutions($input)[6])?>" ></div>
+        <div id="eevee7"><img src="<?php  echo pokeAPISprites(hasMultipleEvolutions($input)[7])?>" ></div>
     </div>
 </div>
 </body>
