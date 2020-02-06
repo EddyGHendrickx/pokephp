@@ -17,7 +17,12 @@ function pokeAPISprites(string $inputValue): string
 {
     $response = file_get_contents("https://pokeapi.co/api/v2/pokemon/" . $inputValue);
     $data = json_decode($response, true);
-    return $data['sprites']['front_default'];
+    if (isset($data['sprites']['front_default'])){
+        return $data['sprites']['front_default'];
+
+    } else {
+        return "";
+    }
 }
 
 function getEvolutionChain(string $inputValue): array
@@ -28,12 +33,32 @@ function getEvolutionChain(string $inputValue): array
     $responseChain = file_get_contents($evolutionChainUrl);
     $dataChain = json_decode($responseChain, true);
     $firstEvolution = $dataChain['chain']['species']['name'];
-    $secondEvolution = $dataChain['chain']['evolves_to'][0]['species']['name'];
-    $thirdEvolution = $dataChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
-    $evolutions = array();
-    array_push($evolutions, $firstEvolution, $secondEvolution, $thirdEvolution);
-    return $evolutions;
+
+    if (isset($firstEvolution)){
+        if (isset($dataChain['chain']['evolves_to'][0]['species']['name'])) {
+            $secondEvolution = $dataChain['chain']['evolves_to'][0]['species']['name'];
+            if (isset($dataChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'])){
+                $thirdEvolution = $dataChain['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'];
+                $evolutions = array();
+                array_push($evolutions, $firstEvolution, $secondEvolution, $thirdEvolution);
+                return $evolutions;
+            } else {
+                $thirdEvolution = "";
+                $evolutions = array();
+                array_push($evolutions, $firstEvolution, $secondEvolution, $thirdEvolution);
+                return $evolutions;
+            }
+        } else {
+            $secondEvolution = "";
+            $thirdEvolution = "";
+            $evolutions = array();
+            array_push($evolutions, $firstEvolution, $secondEvolution, $thirdEvolution);
+            return $evolutions;
+        }
+    }   array_push($evolutions, "","","");
+        return $evolutions;
 }
+
 
 
 function getMoves(string $pokemonInput): array
@@ -41,13 +66,12 @@ function getMoves(string $pokemonInput): array
     $response = file_get_contents("https://pokeapi.co/api/v2/pokemon/" . $pokemonInput);
     $data = json_decode($response, true);
     $moves = array();
-    if (count($data['moves']) == 1){
-        $movesLength = 1;
-    } else {
-        $movesLength = 4;
-    }
-    for ($i = 0; $i < $movesLength; $i++) {
+    $NUMBEROFMOVESIWANT = 4;
+    for ($i = 0; $i < count($data['moves']); $i++) {
         array_push($moves, $data['moves'][$i]['move']['name']);
+    }
+    for ($i = count($data['moves']); $i < $NUMBEROFMOVESIWANT; $i++){
+        array_push($moves, "");
     }
     return $moves;
 }
@@ -77,14 +101,6 @@ function getMoves(string $pokemonInput): array
         <div id="name"><?php echo getNameAndId($input)[0] ?> </div>
         <div id="id">ID: <?php echo getNameAndId($input)[1] ?></div>
     </div>
-<!-- IF PHP returns a null value, HTML stops loading from that point -->
-    <div id="pokeMoves">
-        <div id="moveTitle">MOVES</div>
-        <div id="move1"><?php echo getMoves($input)[0] ?></div>
-        <div id="move2"><?php echo getMoves($input)[1] ?></div>
-        <div id="move3"><?php echo getMoves($input)[2] ?></div>
-        <div id="move4"><?php echo getMoves($input)[3] ?></div>
-    </div>
     <div id="pokeChain">
         <div id="firstPokemon">
             <img src="<?php echo pokeAPISprites(getEvolutionChain($input)[0]) ?>" alt="">
@@ -95,6 +111,13 @@ function getMoves(string $pokemonInput): array
         <div id="thirdPokemon">
             <img src="<?php echo pokeAPISprites(getEvolutionChain($input)[2]) ?>" alt="">
         </div>
+    </div>
+    <div id="pokeMoves">
+        <div id="moveTitle">MOVES</div>
+        <div id="move1"><?php echo getMoves($input)[0] ?></div>
+        <div id="move2"><?php echo getMoves($input)[1] ?></div>
+        <div id="move3"><?php echo getMoves($input)[2] ?></div>
+        <div id="move4"><?php echo getMoves($input)[3] ?></div>
     </div>
 </div>
 </body>
