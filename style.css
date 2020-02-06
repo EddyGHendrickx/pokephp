@@ -1,6 +1,8 @@
 body {
     margin: auto;
     width: 70%;
+    font-family: 'Josefin Sans', sans-serif;
+    background-image: url("https://images7.alphacoders.com/592/thumb-1920-592678.jpg");
 }
 form {
     margin-top: 2em;
@@ -14,6 +16,7 @@ form {
 #container {
     margin-top: 2em;
     display: grid;
+    border-radius: 20px;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
@@ -25,6 +28,7 @@ form {
 #pokeSprite {
     grid-area: sprites;
     background-color: grey;
+    text-align: center;
     padding: 1em;
     display: grid;
     grid-template-rows: 1fr 50px;
@@ -35,8 +39,10 @@ form {
 }
 
 #sprite {
+    margin: auto;
+    position: center;
     grid-area: sprite;
-    align-self: center;
+    align-content: center;
     text-align: center;
 }
 
@@ -72,18 +78,26 @@ form {
 #move1{
     grid-area: move1;
     text-align: center;
+    border-bottom: 1px solid #dfdfdf;
+    border-right: 1px solid #dfdfdf;
 }
 #move2{
     grid-area: move2;
     text-align: center;
+    border-bottom: 1px solid #dfdfdf;
+    border-left: 1px solid #dfdfdf;
 }
 #move3{
     grid-area: move3;
     text-align: center;
+    border-top: 1px solid #dfdfdf;
+    border-right: 1px solid #dfdfdf;
 }
 #move4{
     grid-area: move4;
     text-align: center;
+    border-top: 1px solid #dfdfdf;
+    border-left: 1px solid #dfdfdf;
 }
 
 #pokeChain {
@@ -96,14 +110,19 @@ form {
     "evo1 evo2 evo3";
 }
 #firstPokemon{
+    margin: auto;
     grid-area: evo1;
 }
 
 #secondPokemon {
+    margin: auto;
     grid-area: evo2;
+    border-left: 1px solid #dfdfdf;
+    border-right: 1px solid #dfdfdf;
 }
 
 #thirdPokemon {
+    margin: auto;
     grid-area: evo3;
 
 }

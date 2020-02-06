@@ -3,13 +3,29 @@ declare(strict_types = 1);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
-$input = strtolower($_GET['inputField']);
+if (empty($_GET['inputField'])){
+    $input = "bulbasaur";
+} else {
+    $input = strtolower($_GET['inputField']);
+}
+
+
+$allPokemon = [];
+$allPokemonResponse = file_get_contents("https://pokeapi.co/api/v2/pokemon?offset=0&limit=964");
+$allPokemonData = json_decode($allPokemonResponse, true);
+foreach ($allPokemonData['results'] as $pokemon){
+    array_push($allPokemon, $pokemon['name']);
+}
+
+if (!(in_array($input, $allPokemon))){
+    $input = 'bulbasaur';
+}
 
 function getNameAndId(string $inputValue) : array {
     $response = file_get_contents("https://pokeapi.co/api/v2/pokemon/" . $inputValue);
     $data = json_decode($response, true);
     $nameAndId = array();
-    array_push($nameAndId, $data['species']['name'], $data['id']);
+    array_push($nameAndId, ucfirst($data['species']['name']), $data['id']);
     return $nameAndId;
 }
 
@@ -100,6 +116,9 @@ function getMoves(string $pokemonInput): array
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
+
     <title>Gotta Catch 'Em All!</title>
 </head>
 <body>
